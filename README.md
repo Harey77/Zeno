@@ -16,7 +16,14 @@ Stack: Next.js 16 (static export), React 19, Tailwind 4, Three.js / React Three 
 
 Educational only: not investment advice, and not a SEBI-registered adviser.
 
-## Run
+**Live:** https://harey77.github.io/Zeno/
+
+## Deploy (GitHub Pages)
+Every push to `main` builds the site and publishes it via `.github/workflows/deploy.yml`.
+One-time setup: repo **Settings → Pages → Source: GitHub Actions**. The workflow sets
+`PAGES_BASE_PATH=/<repo name>` so assets resolve under `/Zeno/`.
+
+## Run locally
     npm install
     npm run dev          # http://localhost:3000
 
