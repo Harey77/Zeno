@@ -1,0 +1,165 @@
+@import "tailwindcss";
+
+:root {
+  /* Deep Pine & Emerald Minimalist */
+  --bg: #060c0a;
+  --bg-2: #091410;
+  --surface: #0c1712;
+  --surface-2: #101c17;
+  --line: rgba(0, 245, 155, 0.12);
+  --fg: #f2f5f3;
+  --muted: #86a397;
+  --accent: #00f59b;
+  --accent-soft: rgba(0, 245, 155, 0.12);
+  --on-accent: #04130d;
+  --accent-2: #7dffd0;
+  --good: #00f59b;
+  --warn: #ffb800;
+  --bad: #ff5c5c;
+  --glow-rgb: 0, 245, 155;
+  --card-shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 20px 40px -24px rgba(0,0,0,0.6);
+  --grain: 0.05;
+  color-scheme: dark;
+}
+
+/* Light: parchment canvas, deep forest text, emerald #00A86B. Set by the header toggle (persisted). */
+:root[data-theme="light"] {
+  --bg: #f4f7f5;
+  --bg-2: #eaf1ed;
+  --surface: #ffffff;
+  --surface-2: #ffffff;
+  --line: rgba(11, 61, 41, 0.12);
+  --fg: #0b2e20;
+  --muted: #4f6b5f;
+  --accent: #00a86b;
+  --accent-soft: rgba(0, 168, 107, 0.12);
+  --on-accent: #022116;
+  --accent-2: #0b7a55;
+  --good: #00a86b;
+  --warn: #b77f00; /* amber darkened enough to read on white */
+  --bad: #d23b3b;
+  --glow-rgb: 0, 168, 107;
+  --card-shadow: 0 1px 2px rgba(11,46,32,0.05), 0 18px 36px -24px rgba(11,46,32,0.25);
+  --grain: 0.025;
+  color-scheme: light;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--line);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-on-accent: var(--on-accent);
+  --color-good: var(--good);
+  --color-warn: var(--warn);
+  --color-bad: var(--bad);
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-space);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%) fixed, var(--bg);
+  color: var(--fg);
+  font-family: var(--font-inter), system-ui, sans-serif;
+}
+
+/* Faint glowing grid behind every page. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    radial-gradient(900px circle at 85% -10%, rgba(var(--glow-rgb),0.07), transparent 60%),
+    linear-gradient(to right, rgba(var(--glow-rgb),0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(var(--glow-rgb),0.035) 1px, transparent 1px);
+  background-size: auto, 64px 64px, 64px 64px;
+}
+
+/* Fixed film grain over everything, very faint. */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: var(--grain);
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+::selection { background: rgba(var(--glow-rgb), 0.3); }
+
+h1, h2, h3, h4, .font-display { font-family: var(--font-space), var(--font-inter), sans-serif; }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+.grid-bg {
+  background-image:
+    linear-gradient(to right, rgba(var(--glow-rgb),0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(var(--glow-rgb),0.05) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(ellipse at top, black 25%, transparent 72%);
+}
+
+.glow { background: radial-gradient(700px circle at 50% -10%, rgba(var(--glow-rgb),0.14), transparent 60%); }
+
+.card {
+  position: relative;
+  background: linear-gradient(180deg, var(--surface-2), var(--surface));
+  border: 1px solid var(--line);
+  border-radius: 1.25rem;
+  box-shadow: var(--card-shadow);
+}
+
+/* Cursor spotlight for interactive cards; --mx/--my are set by SpotlightCard. */
+.spotlight::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  background: radial-gradient(360px circle at var(--mx, 50%) var(--my, 50%), rgba(var(--glow-rgb),0.10), transparent 45%);
+}
+.spotlight:hover::before { opacity: 1; }
+
+.btn-accent {
+  background: var(--accent);
+  color: var(--on-accent);
+  box-shadow: 0 10px 30px -12px rgba(var(--glow-rgb),0.75);
+}
+.btn-accent:hover { filter: brightness(1.08); box-shadow: 0 12px 36px -10px rgba(var(--glow-rgb),0.9); }
+
+input[type="range"] { accent-color: var(--accent); width: 100%; }
+
+.fade-in { animation: fade 0.35s ease both; }
+@keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
+
+/* Letter-spacing splits conjuncts in Indic scripts; keep it for English only. */
+html:not([lang^="en"]) [class*="tracking-"] { letter-spacing: 0 !important; }
+
+/* Staggered route transition (app/template.tsx). Ends at transform: none. */
+.page-enter > * { animation: page-rise 0.55s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.page-enter > *:nth-child(2) { animation-delay: 0.08s; }
+.page-enter > *:nth-child(3) { animation-delay: 0.16s; }
+.page-enter > *:nth-child(4) { animation-delay: 0.24s; }
+.page-enter > *:nth-child(n+5) { animation-delay: 0.32s; }
+@keyframes page-rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+
+/* Smooth colour swap when the theme toggles. */
+html.theme-anim, html.theme-anim * { transition: background-color .35s ease, border-color .35s ease, color .35s ease, fill .35s ease, stroke .35s ease !important; }
